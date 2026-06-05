@@ -1,6 +1,6 @@
-namespace Type.Consts.Addressable.Tag
+namespace Type.Consts
 {
-    //어드레서블 태그 관리용 상수
+
     public class Text
     {
         public const string MAIN_MENU = "MainMenuText";
@@ -23,5 +23,30 @@ namespace Type.Consts.Addressable.Tag
     {
         public const string MAIN_MENU = "MainMenuPrefab";
     }
+
+    public class Scene
+    {
+        public const string INIT_SCENE = "Init";
+        public const string MENU_SCENE = "Menu";
+        public const string INPLAYING_SCENE = "InPlaying";
+
+        public static string GetScene(Enums.SceneList scene)
+        {
+            switch (scene)
+            {
+                case Enums.SceneList.init:
+                    return INIT_SCENE;
+                case Enums.SceneList.Menu:
+                    return MENU_SCENE;
+                case Enums.SceneList.InPlaying:
+                    return INPLAYING_SCENE;
+                default:
+                    return "-";
+            }
+        }
+
+    }
+
+
 
 }
