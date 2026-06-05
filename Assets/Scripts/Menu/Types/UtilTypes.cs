@@ -1,4 +1,5 @@
 using System;
+using SimpleActions;
 using UnityEditor;
 using UnityEngine;
 
@@ -172,7 +173,25 @@ namespace Types.Utils
 
     }
 
+    public class Capsule<T>
+    {
+        private T _value;
 
+        private SimpleEvent<Capsule<T>> StartGet = new SimpleEvent<Capsule<T>>();
+        private SimpleEvent<Capsule<T>> StartSet = new SimpleEvent<Capsule<T>>();
 
+        public T Get(bool IsSilence = false)
+        {
+            if (!IsSilence)
+                StartGet.Invoke(this);
+            return _value;
+        }
 
+        public void Set(T value, bool IsSilence = false)
+        {
+            if (!IsSilence)
+                StartSet.Invoke(this);
+            _value = value;
+        }
+    }
 }
