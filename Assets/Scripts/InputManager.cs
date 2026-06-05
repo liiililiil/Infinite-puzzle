@@ -15,8 +15,7 @@ public class InputManager : Managers<InputManager>
     private float currentDistance;
     public SimpleEvent OnInputDown { get; private set; } = new SimpleEvent();
     public SimpleEvent OnInputUp { get; private set; } = new SimpleEvent();
-    public SimpleEvent<float> OnZoomIn { get; private set; } = new SimpleEvent<float>();
-    public SimpleEvent<float> OnZoomOut { get; private set; } = new SimpleEvent<float>();
+    public SimpleEvent<float> OnZoomChange { get; private set; } = new SimpleEvent<float>();
 
 
     private void Awake()
@@ -52,13 +51,9 @@ public class InputManager : Managers<InputManager>
     {
         distance += currentDistance;
 
-        if (currentDistance > distance)
+        if (currentDistance != distance)
         {
-            OnZoomOut.Invoke(currentDistance - distance);
-        }
-        else if (currentDistance < distance)
-        {
-            OnZoomIn.Invoke(distance - currentDistance);
+            OnZoomChange.Invoke(distance);
         }
 
         currentDistance = distance;
