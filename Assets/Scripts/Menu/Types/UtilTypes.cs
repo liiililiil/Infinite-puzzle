@@ -197,13 +197,6 @@ namespace Type.Utils
         }
     }
 
-    public class WaitForTask : CustomYieldInstruction
-    {
-        private System.Threading.Tasks.Task _task;
-        public override bool keepWaiting => !_task.IsCompleted;
-
-        public WaitForTask(System.Threading.Tasks.Task task) => _task = task;
-    }
 
     public class Log
     {

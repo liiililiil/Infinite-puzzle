@@ -546,7 +546,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3286163911610860551, guid: 47c4d084c102a2341bde88fecc22668d, type: 3}
+  m_Sprite: {fileID: 3286163911610860551, guid: e8b1fc67500d937478a7a6660fae317b, type: 3}
   m_PreserveAspect: 0
 --- !u!222 &515514137
 CanvasRenderer:
