@@ -7,6 +7,36 @@ using UnityEngine;
 namespace Utils
 {
 
+    public class RayCast
+    {
+        public static MSCell TryGetCell(Vector2 position, Vector2 direction, float distance)
+        {
+            return TryGetGameObject(position, direction, distance, LayerMask.GetMask("Cell"))?.GetComponent<MSCell>();
+        }
+
+
+        // 게임 오브젝트 탐색
+        public static GameObject TryGetGameObject(Vector2 position, Vector2 direction, float distance, int layer)
+        {
+            Vector2 startPos = (Vector2)position + direction * ((Type.Consts.MineSweeper.TILE_SIZE / 2) + 0.1f);
+            float targetDistance = Mathf.Max(distance - ((Type.Consts.MineSweeper.TILE_SIZE / 2) + 0.1f), 0.1f);
+
+#if UNITY_EDITOR
+            DrawRayDebug(startPos, direction, targetDistance);
+#endif
+            RaycastHit2D hit = Physics2D.Raycast(startPos, direction, targetDistance, layer);
+            return hit.collider?.gameObject;
+        }
+
+
+
+#if UNITY_EDITOR
+        public static void DrawRayDebug(Vector2 center, Vector2 direction, float distance)
+        {
+            Debug.DrawRay(center, direction * distance, Color.green, 1);
+        }
+#endif
+    }
     public static class CameraUtils
     {
         public static Vector2 GetMousePosition()
@@ -58,6 +88,8 @@ namespace Utils
 
             return new Vector2Byte(x, y);
         }
+
+
     }
 
     public static class FloatUtils
@@ -73,6 +105,12 @@ namespace Utils
         public static bool IsInRange(float value, float min, float max)
         {
             return value >= min && value <= max;
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public static byte ByteLerp(byte a, byte b, byte t)
+        {
+            return (byte)(a + (((b - a) * t) >> 8));
         }
     }
 
@@ -181,5 +219,8 @@ namespace Utils.Generic
                 return b.Substring(0, len);
             }
         }
+
     }
+
+
 }

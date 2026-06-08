@@ -25,7 +25,8 @@ namespace SimpleActions
             List<Action> tempActions = new List<Action>(actions);
             actions.Clear();
 
-            for(int i = tempActions.Count -1; i >=0; i--) {
+            for (int i = tempActions.Count - 1; i >= 0; i--)
+            {
                 try
                 {
                     tempActions[i].Invoke();
@@ -41,115 +42,104 @@ namespace SimpleActions
         {
             actions.Clear();
         }
-    } 
+    }
     //경량화된 이벤트
     public class SimpleEvent
     {
-        List<Action> actions = new List<Action>();
+        private Action onEventInvoked;
 
         public void AddListener(Action action)
         {
-            actions.Add(action);
+            onEventInvoked += action;
         }
 
         public void RemoveListener(Action action)
         {
-            actions.Remove(action);
+            onEventInvoked -= action;
         }
 
         public void Invoke()
         {
-            for(int i = actions.Count -1; i >=0; i--)
-            {
-                actions[i].Invoke();
-            }
+            onEventInvoked?.Invoke();
         }
-        
-        ~SimpleEvent()
+
+        public void Clear()
         {
-            actions.Clear();
+            onEventInvoked = null;
         }
     }
-
-    public class SimpleEvent<T>
+    public class SimpleEvent<T1>
     {
-        List<Action<T>> actions = new List<Action<T>>();
+        private Action<T1> onEventInvoked;
 
-        public void AddListener(Action<T> action)
+        public void AddListener(Action<T1> action)
         {
-            actions.Add(action);
+            onEventInvoked += action;
         }
 
-        public void RemoveListener(Action<T> action)
+        public void RemoveListener(Action<T1> action)
         {
-            actions.Remove(action);
+            onEventInvoked -= action;
         }
 
-        public void Invoke(T param)
+        public void Invoke(T1 param1)
         {
-            for (int i = actions.Count - 1; i >= 0; i--)
-            {
-                actions[i].Invoke(param);
-            }
+            onEventInvoked?.Invoke(param1);
         }
-        ~SimpleEvent()
+
+        public void Clear()
         {
-            actions.Clear();
+            onEventInvoked = null;
         }
     }
 
     public class SimpleEvent<T1, T2>
     {
-        List<Action<T1, T2>> actions = new List<Action<T1, T2>>();
+        private Action<T1, T2> onEventInvoked;
 
         public void AddListener(Action<T1, T2> action)
         {
-            actions.Add(action);
+            onEventInvoked += action;
         }
 
         public void RemoveListener(Action<T1, T2> action)
         {
-            actions.Remove(action);
+            onEventInvoked -= action;
         }
 
         public void Invoke(T1 param1, T2 param2)
         {
-            for (int i = actions.Count - 1; i >= 0; i--)
-            {
-                actions[i].Invoke(param1, param2);
-            }
+            onEventInvoked?.Invoke(param1, param2);
         }
 
-        ~SimpleEvent()
+        public void Clear()
         {
-            actions.Clear();
+            onEventInvoked = null;
         }
     }
 
     public class SimpleEvent<T1, T2, T3>
     {
-        List<Action<T1, T2, T3>> actions = new List<Action<T1, T2, T3>>();
+        private Action<T1, T2, T3> onEventInvoked;
 
         public void AddListener(Action<T1, T2, T3> action)
         {
-            actions.Add(action);
+            onEventInvoked += action;
         }
 
         public void RemoveListener(Action<T1, T2, T3> action)
         {
-            actions.Remove(action);
+            onEventInvoked -= action;
         }
 
         public void Invoke(T1 param1, T2 param2, T3 param3)
         {
-            for (int i = actions.Count - 1; i >= 0; i--)
-            {
-                actions[i].Invoke(param1, param2, param3);
-            }
+            onEventInvoked?.Invoke(param1, param2, param3);
         }
-        ~SimpleEvent()
+
+        public void Clear()
         {
-            actions.Clear();
+            onEventInvoked = null;
         }
     }
 }

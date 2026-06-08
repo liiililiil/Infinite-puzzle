@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 using Extensions;
 using SimpleEasing;
-using Types.Utils;
+using Type.Utils;
 using Type.Enums.Menu;
 
 public class MenuStateButton : UIClickable

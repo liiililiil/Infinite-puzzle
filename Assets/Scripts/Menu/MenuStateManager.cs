@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using SimpleActions;
 using Type.Enums.Menu;
+using UnityEngine;
 
 
 
@@ -19,6 +22,7 @@ public class MenuStateManager : Managers<MenuStateManager>
     private void Start()
     {
         ChangeMenuState(MenuState.MainMenu);
+        onMenuStateChanged.AddListener(OnChangeMenuState);
     }
 
     //메뉴 변경
@@ -30,6 +34,19 @@ public class MenuStateManager : Managers<MenuStateManager>
 
         //메뉴 상태 변경 처리
         onMenuStateChanged.Invoke(newState);
+    }
+
+    private void OnChangeMenuState(MenuState menuState)
+    {
+        // Load 상태면 인게임 로딩
+        if (menuState == MenuState.Load) StartCoroutine(Slower());
+
+    }
+
+    private IEnumerator Slower()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneListManager.Instance.LoadScene(Type.Enums.SceneList.MineSweeper);
     }
 
 }

@@ -1,70 +1,62 @@
 using SimpleActions;
 using Type;
-using System.Runtime.InteropServices;
+using Type.Utils;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class InputManager : Managers<InputManager>
 {
-    private DeviceType currentDevice;
+    private Vector2 _prevInputPosition;
+    private bool _isLeftDragging;
+    private bool _isRightDragging;
 
-    [SerializeField]
-    private Vector2 inputPosition;
+    public bool _isInputable { get; private set; }
 
-    [SerializeField]
-    private float currentDistance;
-    public SimpleEvent OnInputDown { get; private set; } = new SimpleEvent();
-    public SimpleEvent OnInputUp { get; private set; } = new SimpleEvent();
-    public SimpleEvent<float> OnZoomChange { get; private set; } = new SimpleEvent<float>();
+    public SimpleEvent OnRightDown { get; private set; } = new SimpleEvent();
+    public SimpleEvent OnRightUp { get; private set; } = new SimpleEvent();
+    public SimpleEvent OnLeftDown { get; private set; } = new SimpleEvent();
+    public SimpleEvent OnLeftUp { get; private set; } = new SimpleEvent();
 
+    // 변화량을 제한 없이 그대로 전달
+    public SimpleEvent<float> OnZoomDelta { get; private set; } = new SimpleEvent<float>();
+    public SimpleEvent<Vector2> OnDragDelta { get; private set; } = new SimpleEvent<Vector2>();
 
-    private void Awake()
-    {
-        Singleton(true);
-    }
+    private void Awake() => Singleton(false);
 
     private void Update()
     {
-        PcUpdate();
-    }
+        Vector2 rawInput = Input.mousePosition;
 
+        // 좌측 버튼 드래그
+        if (Input.GetMouseButtonDown(0)) { _isLeftDragging = true; _prevInputPosition = rawInput; OnLeftDown.Invoke(); }
+        if (Input.GetMouseButtonUp(0)) { _isLeftDragging = false; OnLeftUp.Invoke(); }
 
-    private void PcUpdate()
-    {
-        // Pos
-        inputPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // 우측 버튼 드래그
+        if (Input.GetMouseButtonDown(1)) { _isRightDragging = true; _prevInputPosition = rawInput; OnRightDown.Invoke(); }
+        if (Input.GetMouseButtonUp(1)) { _isRightDragging = false; OnRightUp.Invoke(); }
 
-        // Down Up
-        if (Input.GetMouseButtonDown(0))
-            OnInputDown.Invoke();
-
-        if (Input.GetMouseButtonUp(0))
-            OnInputUp.Invoke();
-
-        // Zoom
-        float distance = Input.GetAxis("Mouse ScrollWheel");
-
-        distanceApply(distance);
-    }
-
-    private void distanceApply(float distance)
-    {
-        distance += currentDistance;
-
-        if (currentDistance != distance)
+        // 드래그 중 처리 (데드존 적용)
+        if (_isLeftDragging || _isRightDragging)
         {
-            OnZoomChange.Invoke(distance);
+            Vector2 delta = rawInput - _prevInputPosition;
+
+            // 데드존 체크: sqrMagnitude 사용으로 최적화 (1f * 1f = 1f)
+            if (delta.sqrMagnitude > 20f)
+            {
+                OnDragDelta.Invoke(delta);
+                _prevInputPosition = rawInput;
+            }
         }
 
-        currentDistance = distance;
+        // 줌 처리
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll != 0)
+        {
+            OnZoomDelta.Invoke(scroll);
+        }
     }
-
-
 
     public Vector2 GetInputPositionToWorld()
     {
-        return inputPosition;
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
-
-
 }

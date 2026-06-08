@@ -1,12 +1,10 @@
 using Type.Enums.GamePlay;
-using Types.Utils;
+using Type.Utils;
 using UnityEngine;
 
 public class PlayConfigBuffer : Managers<PlayConfigBuffer>
 {
-    public Capsule<GameType> gameType;
-    public Capsule<GameStyle> gameStyle;
-
+    public GameStyle gameStyle { get; set; }
     private void Awake()
     {
         Singleton(true);

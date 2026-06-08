@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
 using SimpleActions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 개발자 편의를 위한 타입
 /// </summary>
-namespace Types.Utils
+namespace Type.Utils
 {
     #region ObjectWithComponent
 
@@ -193,5 +195,101 @@ namespace Types.Utils
                 StartSet.Invoke(this);
             _value = value;
         }
+    }
+
+    public class WaitForTask : CustomYieldInstruction
+    {
+        private System.Threading.Tasks.Task _task;
+        public override bool keepWaiting => !_task.IsCompleted;
+
+        public WaitForTask(System.Threading.Tasks.Task task) => _task = task;
+    }
+
+    public class Log
+    {
+        public static void Log2DArray<T>(T[,] array, bool convertMine = true)
+        {
+            if (array == null)
+            {
+                Debug.LogError("Log2DArray: 배열이 Null입니다!");
+                return;
+            }
+
+            int ySize = array.GetLength(0); // 행 (Row)
+            int xSize = array.GetLength(1); // 열 (Column)
+
+            // 스트링빌더 용량 최적화 할당
+            System.Text.StringBuilder sb = new System.Text.StringBuilder((xSize * 4 + 2) * ySize);
+            sb.AppendLine($"[2D Array Log] Size: {ySize} x {xSize}");
+
+            for (int y = 0; y < ySize; y++)
+            {
+                for (int x = 0; x < xSize; x++)
+                {
+                    T value = array[y, x];
+                    string elementStr = value.ToString();
+
+                    // 지뢰찾기 디버깅 편의 기능: -1은 지뢰 기호로 치환
+                    if (convertMine && elementStr == "-1")
+                    {
+                        elementStr = "*";
+                    }
+
+                    // 각 칸을 3글자 크기로 우측 정렬해서 공백을 채움 (줄 뒤틀림 방지)
+                    sb.Append(elementStr.PadLeft(3));
+                    sb.Append(" ");
+                }
+                sb.AppendLine(); // 한 행이 끝나면 줄바꿈
+            }
+
+            // 단 한 번의 로그 호출로 맵 전체 가독성 확보
+            Debug.Log(sb.ToString());
+        }
+    }
+
+    [Serializable]
+    public struct SpritePlus
+    {
+        public Sprite sprite;
+        public Color color;
+    }
+
+    [Serializable]
+    public struct IndexPaird<_T1, _T2>
+    {
+        [SerializeField]
+        private _T1 _key;
+        public _T1 key { get => _key; }
+
+        [SerializeField]
+        private _T2 _value;
+        public _T2 value { get => value; }
+    }
+
+    [Serializable]
+    public struct ReadOnlyValue<_T1>
+    {
+        [SerializeField]
+        private _T1 _value;
+
+        public _T1 value { get => _value; }
+    }
+
+    [Serializable]
+    public class TextList
+    {
+        [SerializeField]
+        private List<Text> texts;
+        public string text { set => SetText(value); }
+
+        public void SetText(string str)
+        {
+            foreach (Text text in texts)
+            {
+                text.text = str;
+            }
+        }
+
+        public int Count() => texts.Count;
     }
 }

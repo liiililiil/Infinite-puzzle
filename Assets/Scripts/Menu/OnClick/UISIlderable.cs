@@ -1,5 +1,5 @@
 using Type;
-using Types.Utils;
+using Type.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 

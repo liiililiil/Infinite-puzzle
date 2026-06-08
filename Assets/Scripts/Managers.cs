@@ -4,7 +4,7 @@ public class Managers<T> : MonoBehaviour
 {
     public static T Instance { get; private set; }
 
-    public void Singleton(bool isDontDestroyOnLoad = true)
+    protected void Singleton(bool isDontDestroyOnLoad = true)
     {
         if (Instance == null)
         {
@@ -21,4 +21,8 @@ public class Managers<T> : MonoBehaviour
         }
     }
 
+    protected void OnDisable()
+    {
+        Instance = default;
+    }
 }

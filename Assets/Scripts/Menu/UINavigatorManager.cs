@@ -3,7 +3,7 @@ using Type;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using Utils;
-using Types.Utils;
+using Type.Utils;
 using Type.Enums.Menu;
 public class UINavigatorManager : Managers<UINavigatorManager>
 {
