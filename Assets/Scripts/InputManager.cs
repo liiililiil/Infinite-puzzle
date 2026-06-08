@@ -40,7 +40,7 @@ public class InputManager : Managers<InputManager>
             Vector2 delta = rawInput - _prevInputPosition;
 
             // 데드존 체크: sqrMagnitude 사용으로 최적화 (1f * 1f = 1f)
-            if (delta.sqrMagnitude > 20f)
+            if (delta.sqrMagnitude > 40f)
             {
                 OnDragDelta.Invoke(delta);
                 _prevInputPosition = rawInput;

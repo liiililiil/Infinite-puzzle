@@ -50,7 +50,7 @@ public class CameraManager : MonoBehaviour
     {
         if (!isPlaying) return;
 
-        targetPos -= delta * 0.02f * (targetZoom * 0.2f);
+        targetPos -= delta * 0.012f * (targetZoom * 0.2f);
         ClampTargetPosition();
     }
 
@@ -78,8 +78,8 @@ public class CameraManager : MonoBehaviour
 
         float visibleCellSize = 3.0f;
 
-        float maxX = Mathf.Max(0, mapHalfX + camHalfX - visibleCellSize);
-        float maxY = Mathf.Max(0, mapHalfY + camHalfY - visibleCellSize);
+        float maxX = Mathf.Max(mapHalfX, mapHalfX + camHalfX - visibleCellSize);
+        float maxY = Mathf.Max(mapHalfY, mapHalfY + camHalfY - visibleCellSize);
 
         targetPos.x = Mathf.Clamp(targetPos.x, -maxX, maxX);
         targetPos.y = Mathf.Clamp(targetPos.y, -maxY, maxY);
